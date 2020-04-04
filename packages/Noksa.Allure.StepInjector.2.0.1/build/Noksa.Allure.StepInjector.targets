@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_Command Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">$(ProjectDir)$(OutDir)\Noksa.Allure.StepInjector.exe "$(TargetPath)"</_Command>
+    <_Command
+      Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' OR '$(TargetFrameworkIdentifier)' == '.NETStandard'">
+      dotnet "$(ProjectDir)$(OutDir)Noksa.Allure.StepInjector.dll" "$(TargetPath)"
+    </_Command>
+  </PropertyGroup>
+  <Target Name="InjectSteps" AfterTargets="AfterBuild">
+    <Copy Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' OR '$(TargetFrameworkIdentifier)' == '.NETStandard'" DestinationFolder="$(ProjectDir)$(OutDir)" SourceFiles="$(MSBuildThisFileDirectory)..\runtimeconfig\Noksa.Allure.StepInjector.runtimeconfig.json"/>
+    <Exec Command="$(_Command)" Timeout="90000" ContinueOnError="true" StandardErrorImportance="low" />
+  </Target>
+</Project>
